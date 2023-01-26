@@ -9,7 +9,7 @@ This is an example of the level generation found in pre-Repentance Isaac. The id
 I recommend the use of a virtual environment for playing with this. As a note, this was developed with Python 3 and the following commands are all for that version of the language. To deploy you will just need to run the following:
 
 ```
-git@github.com:SkinnyPigeon/isaac-levelgen.git
+git clone git@github.com:SkinnyPigeon/isaac-levelgen.git
 cd isaac-levelgen
 python -m pip install -r requirement.txt
 ```
