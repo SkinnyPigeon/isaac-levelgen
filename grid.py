@@ -1,15 +1,21 @@
 import random
 import statistics
+from typing import List
 
 DIRECTIONS = [-10, 10, -1, 1]
 START = 50
 MAX = 10
 
-def direction():
-    return random.choice(DIRECTIONS)
 
-
-def enough_neighbours(cell, rooms):
+def enough_neighbours(cell: int, rooms: List[int]) -> bool:
+    """Checks whether the neighbour already has more than one neighbour attached.
+    
+    Parameters:
+        cell (int): The cell to check the neighbours of
+        rooms (List): The list of current rooms in the level
+    Returns:
+        enough_neighbours (bool): Whether there are enough neighbours
+    """
     count = 0
     for d in DIRECTIONS:
         if cell + d in rooms:
@@ -19,7 +25,13 @@ def enough_neighbours(cell, rooms):
     return False
 
 
-def levelgen():
+def levelgen() -> List[int]:
+    """Generates a list of rooms for the level based on the description found
+    here: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
+
+    Returns:
+        rooms (List): A list of rooms for the level
+    """
     current = START
     rooms = [current]
     while len(rooms) < MAX:
@@ -48,11 +60,17 @@ def levelgen():
                 else:
                     print(f"ADDING NEIGHBOUR: {neighbour}")
                     rooms.append(neighbour)
-
     return rooms
 
 
-def calc_route_to_boss(rooms):
+def calc_route_to_boss(rooms: List[int]) -> List[int]:
+    """Calculates the route from the boss room to the start room.
+
+    Parameters:
+        rooms (List): The list of rooms from the levelgen function
+    Returns:
+        route (List): The route from boss room to start room
+    """
     rooms.reverse()
     print(rooms)
     ds = DIRECTIONS.copy()
@@ -74,7 +92,11 @@ def calc_route_to_boss(rooms):
             break
 
 
-def run_mcs():
+def run_mcs() -> float:
+    """Runs a Monte Carlo Simulation to calculate the average
+    number of rooms the player must pass through on the shortest
+    trip to the boss
+    """
     res = []
     for _ in range(10000):
         rooms = levelgen()
