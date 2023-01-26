@@ -59,28 +59,18 @@ def levelgen() -> tuple:
     while len(rooms) < MAX:
         for i, room in enumerate(rooms):
             if len(rooms) > MAX:
-                print("FINISHED")
-                print("----------------")
                 break
-            print("----------------")
-            print(f"WORKING ON ROOM: {room}")
             for d in DIRECTIONS:
                 if len(rooms) > MAX:
-                    print("ENOUGH ROOMS")
                     break
                 neighbour = room + d
-                print(f"CALCULATING NEIGHBOUR: {neighbour}")
                 if neighbour in rooms:
-                    print("NEIGHBOUR IN ROOM")
                     continue
                 if enough_neighbours(neighbour, rooms):
-                    print("ENOUGH NEIGHBOURS")
                     continue
                 if random.choice([0,1]) == 0:
-                    print("RANDOM CHANCE")
                     continue
                 else:
-                    print(f"ADDING NEIGHBOUR: {neighbour}")
                     dcoords = get_coords(d)
                     coords = np.append(coords, coords[i] + dcoords, axis=0)
                     rooms.append(neighbour)
