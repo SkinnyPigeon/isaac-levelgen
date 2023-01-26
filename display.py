@@ -1,7 +1,7 @@
 from typing import List
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-from grid_coords import levelgen, calc_route_to_boss, calc_coords_to_boss
+from grid_coords import room_count, levelgen, calc_route_to_boss, calc_coords_to_boss
 
 
 def plotlevel(roomcs: List, routecs: List) -> None:
@@ -21,7 +21,7 @@ def plotlevel(roomcs: List, routecs: List) -> None:
             color = "red"
             label = "Boss Room"
         else:
-            color = "white"
+            color = "lightgray"
             label = "Normal Room"
         ax.add_patch(Rectangle(
             (coords[0], coords[1]),
@@ -36,19 +36,29 @@ def plotlevel(roomcs: List, routecs: List) -> None:
     handles, labels = ax.get_legend_handles_labels()
     cleaned = dict(zip(labels, handles))
     ax.legend(cleaned.values(), cleaned.keys())
+    ax.get_yaxis().set_visible(False)
+    ax.get_xaxis().set_visible(False)
     plt.show()
 
 
-def show_level() -> None:
+def show_level(nrooms) -> None:
+    """Calls the relevant functions to display the level and route.
+    
+    Parameters:
+        nrooms (int): The number of rooms to generate the level with
+    """
     try:
-        rooms, roomcs = levelgen()
+        rooms, roomcs = levelgen(nrooms)
         route = calc_route_to_boss(rooms)
         rooms.reverse()
         route.reverse()
         routecs = calc_coords_to_boss(rooms, route, roomcs)
         plotlevel(roomcs, routecs)
     except AttributeError:
-        show_level()
+        show_level(nrooms)
+
 
 if __name__ == "__main__":
-    show_level()
+    # These function calls are just for demonstration purposes. 
+    nrooms = room_count(2, False, False, False)
+    show_level(nrooms)

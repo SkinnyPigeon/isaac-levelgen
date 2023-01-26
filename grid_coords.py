@@ -1,11 +1,45 @@
 import random
+import math
 import statistics
 from typing import List
 import numpy as np
 
 DIRECTIONS = [-10, 10, -1, 1]
 START = 50
-MAX = 25
+
+def room_count(floor: int, xl: bool, curse: bool, void: bool = False) -> int:
+    """
+    If the floor is not XL or Added in Afterbirth † The Void:
+        NumberOfRooms = 3.33 × FloorDepth + 5-6 (maximum of 20)
+    If the floor is an XL floor:
+        NumberOfRooms = 1.8 × (3.33 × FloorDepth + 5-6) (maximum of 45)
+    If the floor is The Void:
+        NumberOfRooms = 50-59
+    2-3 more rooms are added if playing on Hard Mode
+    4 more rooms are added if the floor has Curse of the Lost.
+
+    Parameters:
+        floor (int): The floor number to generate the room count for
+        xl (bool): Is there Curse of the Labarynth
+        curse (bool): Is there Curse of the lost
+        void (bool): Is it the void
+    Returns:
+        rooms (int): The number of rooms for that floor
+    """
+    rooms = 3.33 * floor + random.randint(5, 6) + random.randint(2, 3)
+    if void:
+        return random.randint(50, 59)
+    if not xl:
+        if rooms >= 20:
+            rooms = 20
+        if not curse:
+            return math.floor(rooms)
+        return math.floor(rooms) + 4
+    if xl:
+        rooms = rooms * 1.8
+        if rooms >= 45:
+            return 45
+        return math.floor(rooms)
 
 
 def get_coords(direction: int) -> np.array:
@@ -44,7 +78,7 @@ def enough_neighbours(cell: int, rooms: List[int]) -> bool:
     return False
 
 
-def levelgen() -> tuple:
+def levelgen(nrooms) -> tuple:
     """Generates a list of rooms for the level based on the description found
     here: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/.
     Also calculates a set of coordinates for plotting
@@ -56,12 +90,12 @@ def levelgen() -> tuple:
     current = START
     rooms = [current]
     coords = np.array([[5, 5]])
-    while len(rooms) < MAX:
+    while len(rooms) < nrooms:
         for i, room in enumerate(rooms):
-            if len(rooms) > MAX:
+            if len(rooms) > nrooms:
                 break
             for d in DIRECTIONS:
-                if len(rooms) > MAX:
+                if len(rooms) > nrooms:
                     break
                 neighbour = room + d
                 if neighbour in rooms:
@@ -122,14 +156,19 @@ def calc_coords_to_boss(rooms: List[int], route: List[int], coords: np.array) ->
     return np.array(routecs)
 
 
-def run_mcs() -> float:
+def run_mcs(nrooms) -> float:
     """Runs a Monte Carlo Simulation to calculate the average
     number of rooms the player must pass through on the shortest
-    trip to the boss
+    trip to the boss.
+
+    Parameters:
+        nrooms (int): The number of rooms based on the room_count function
+    Returns:
+        average (float): The average number of rooms needed to traverse the level
     """
     res = []
-    for _ in range(1000):
-        rooms, _ = levelgen()
+    for _ in range(10000):
+        rooms, _ = levelgen(nrooms)
         route = calc_route_to_boss(rooms)
         if route:
             res.append(len(route))
@@ -137,4 +176,6 @@ def run_mcs() -> float:
 
 
 if __name__ == "__main__":
-    print(f"AVERAGE NUMBER OF ROOMS TO BOSS: {run_mcs()}")
+    nrooms = room_count(1, False, False)
+    print(f"NUMBER OF ROOMS ON THE LEVEL: {nrooms}")
+    print(f"AVERAGE NUMBER OF ROOMS TO BOSS: {run_mcs(nrooms)}")
