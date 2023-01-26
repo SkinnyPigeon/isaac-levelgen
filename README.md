@@ -1,6 +1,6 @@
 # Binding of Isaac Level Generation for Monitoring Sinvicta-Navigation
 
-<img src="example.png" width=50% style="display: block; margin: 0 auto">
+![Picture](example.png){width=50% style="display: block; margin: 0 auto"}
 
 This is an example of the level generation found in pre-Repentance Isaac. The idea behind this was to aid the community in finally determining whether Sinvicta-navigation is really a thing.
 
