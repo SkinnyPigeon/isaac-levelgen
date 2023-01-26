@@ -12,8 +12,7 @@ def plotlevel(roomcs: List, routecs: List) -> None:
         routecs (List): The coordinates of the route to plot
     """
     _, ax = plt.subplots(figsize=(8,8))
-    ax.set_xlim(0,15)
-    ax.set_ylim(0,15)
+    ax.set_aspect("equal")
     for i, coords in enumerate(roomcs):
         if i == 0:
             color = "green"
@@ -40,10 +39,16 @@ def plotlevel(roomcs: List, routecs: List) -> None:
     plt.show()
 
 
+def show_level() -> None:
+    try:
+        rooms, roomcs = levelgen()
+        route = calc_route_to_boss(rooms)
+        rooms.reverse()
+        route.reverse()
+        routecs = calc_coords_to_boss(rooms, route, roomcs)
+        plotlevel(roomcs, routecs)
+    except AttributeError:
+        show_level()
+
 if __name__ == "__main__":
-    rooms, roomcs = levelgen()
-    route = calc_route_to_boss(rooms)
-    rooms.reverse()
-    route.reverse()
-    routecs = calc_coords_to_boss(rooms, route, roomcs)
-    plotlevel(roomcs, routecs)
+    show_level()

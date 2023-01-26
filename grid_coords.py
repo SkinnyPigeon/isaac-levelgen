@@ -5,7 +5,7 @@ import numpy as np
 
 DIRECTIONS = [-10, 10, -1, 1]
 START = 50
-MAX = 10
+MAX = 25
 
 
 def get_coords(direction: int) -> np.array:
@@ -138,8 +138,8 @@ def run_mcs() -> float:
     trip to the boss
     """
     res = []
-    for _ in range(10):
-        rooms = levelgen()
+    for _ in range(1000):
+        rooms, _ = levelgen()
         route = calc_route_to_boss(rooms)
         if route:
             res.append(len(route))
@@ -147,15 +147,4 @@ def run_mcs() -> float:
 
 
 if __name__ == "__main__":
-    # print(f"AVERAGE NUMBER OF ROOMS TO BOSS: {run_mcs()}")
-    rooms, coords = levelgen()
-    route = calc_route_to_boss(rooms)
-    rooms.reverse()
-    route.reverse()
-
-
-    routecoords = calc_coords_to_boss(rooms, route, coords)
-    print(rooms)
-    print(route)
-    print(coords)
-    print(routecoords)
+    print(f"AVERAGE NUMBER OF ROOMS TO BOSS: {run_mcs()}")
