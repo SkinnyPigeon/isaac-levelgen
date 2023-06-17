@@ -44,6 +44,6 @@ This will perform an MCS on the level generation and boss route calculation that
 
 - One issue I've noticed is that it does not do Isaac-loops which is curious and would need to be fixed.
 
-- I imagine that for this to be of use, it would we would likely need to extend it to include deliberate trips to the shop/item/curse rooms
+- I imagine that for this to be of use, it would likely need to extend it to include deliberate trips to the shop/item/curse rooms
 
 - To further extend it, it would likely need to be paired with some image recognition magicks to evaluate past runs to count how many rooms Sinvicta actually does use. My money would be on an image classifier that increments a room count on screen transitions
